@@ -1,0 +1,9 @@
+{% if problems_list %}
+    <ul>
+    {% for problem in problems_list %}
+        <li><a href="/{{ problem.id }}/problem">{{ problem.problem_title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No problem found.</p>
+{% endif %}

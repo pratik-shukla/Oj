@@ -19,7 +19,7 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home_page'),
-    path('problem/', views.problem, name='problem_page'),
-    path('submission/', views.submission, name='submission_page'),
+    path('<int:problem_id>/problem', views.problem, name='problem_page'),
+    path('submission', views.submission, name='submission_page'),
 
 ]
