@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import problems, submission
+from .models import problems, submissions
 admin.site.register(problems)
-admin.site.register(submission)
+admin.site.register(submissions)
 
 
 # Register your models here.
