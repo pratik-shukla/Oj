@@ -8,7 +8,8 @@ class problems(models.Model):
     problem_title=models.CharField(max_length=100, default="--problemTitle--")
     problem_statement= models.TextField()
     test_cases = models.FileField(upload_to='oj_test_cases/', null='True')
-    expected_output = models.FileField(upload_to='oj_expected_outputs/', null='True')
+    expected_output = models.FileField(
+    upload_to='oj_expected_outputs/', null='True')
 
 class submissions(models.Model):
     problem=models.ForeignKey(problems,on_delete=models.CASCADE)

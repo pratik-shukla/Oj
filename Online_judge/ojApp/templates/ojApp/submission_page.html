@@ -1,0 +1,48 @@
+
+
+<div style="background-color: white;margin:0.3em 3px 0 3px;position:relative;">
+    <div class="ilt">&nbsp;</div>
+    <div class="irt">&nbsp;</div>
+
+    <tr class="first-row">
+        <th style="width:6em;" class="top left">#</th>
+        <th class="top">When</th>
+        <th class="top">Problem</th>
+        <th class="top">Verdict</th>
+    </tr>
+        
+    {% if latest_question_list %}
+    <ul>
+        {% for question in latest_question_list %}
+        <li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No submission available.</p>
+    {% endif %}
+    <!-- <table class="status-frame-datatable">
+        <tbody>
+            
+
+
+            <tr data-submission-id="163210435" data-a="3919577225595461600" partymemberids=";2241651;">
+                <td class="id-cell dark left">
+                    <a class="view-source" title="Source" href="/problemset/submission/1345/163210435"
+                        submissionid="163210435" handled="true">163210435</a>
+                </td>
+                <td class="status-small dark">
+                    Jul/08/2022 18:56<sup title="timezone offset" style="font-size:8px;">UTC+5.5</sup>
+                </td>
+                
+                </td>
+                <td class="status-small dark" data-problemid="600708">
+                    <a href="/problemset/problem/1345/B">
+                        1345B - Card Constructions
+                    </a>
+                </td>
+                <td partymemberids=";2241651;" class="status-cell status-small status-verdict-cell dark"
+                    submissionid="163210435" waiting="false"><span class="verdict-accepted">Accepted</span></td>
+            </tr>
+        </tbody>
+    </table> -->
+</div>
