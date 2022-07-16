@@ -51,6 +51,7 @@ def problem(request, problem_id):
 
 def submission(request):
     recent_submissions = submissions.objects.all()
+
     template = loader.get_template('ojApp/submission_page.html')
     context = {
         'recent_submissions': recent_submissions,
