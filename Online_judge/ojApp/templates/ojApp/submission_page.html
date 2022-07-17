@@ -19,7 +19,7 @@
             <tr>
                 <td >{{submission.time_stamp}}</td>
                 <td ><a href="{{ submission.problem_id }}/problem">{{submission.problem_id}}</a></td>
-                {% if submission.verdict == Accepted %}
+                {% if submission.verdict == "Accepted" %}
                     <td style="background-color:MediumSeaGreen;">Accepted</td>
                 {% else %}
                     <td style="background-color:Tomato;">Not Accepted</td>
