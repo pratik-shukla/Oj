@@ -5,7 +5,6 @@ from django.template import loader
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import submission_form
 from django.contrib import messages
-from django.contrib import messages
 
 import os 
 import filecmp
@@ -13,7 +12,6 @@ import filecmp
 
 def home(request):
     problems_list=problems.objects.all()
-    template = loader.get_template('ojApp/home.html')
     context = {
         'problems_list':problems_list,
     }
@@ -26,6 +24,7 @@ def problem(request, problem_id):
         if form.is_valid():
             if request.user.is_authenticated:
                 new_submission=submissions()
+                new_submission.user_name = request.user.username
                 new_submission.problem=problems.objects.get(pk=problem_id)
                 new_submission.submitted_code=request.FILES["submitted_code"]
                 code_file = r"oj_received\try_code.cpp"
@@ -40,7 +39,6 @@ def problem(request, problem_id):
                 else:
                     new_submission.verdict = 'Not Accepted'
                 new_submission.save()
-                print(new_submission.verdict, new_submission.problem)
                 return redirect('submission_page')
             else:
                 messages.warning(request, f'Please login to make a subnmission')
