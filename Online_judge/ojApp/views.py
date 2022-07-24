@@ -1,9 +1,12 @@
 from django.http import HttpResponse
-from .models import User, problems, submissions
+from .models import  problems, submissions
 from django.forms import formset_factory
 from django.template import loader
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import submission_form
+from django.contrib import messages
+from django.contrib import messages
+
 import os 
 import filecmp
 
@@ -21,23 +24,27 @@ def problem(request, problem_id):
     if request.method == 'POST':
         form=submission_form(request.POST, request.FILES)
         if form.is_valid():
-            new_submission=submissions()
-            new_submission.problem=problems.objects.get(pk=problem_id)
-            new_submission.submitted_code=request.FILES["submitted_code"]
-            code_file = r"oj_received\try_code.cpp"
-            input_file = r"oj_test_cases\input_oj.txt"
-            e_out_file = r"oj_expected_outputs\output_oj.txt"
-            received_out = r"received_outputs\rec_out.txt"
-            #os.system('dir')
-            os.system('g++ '+code_file)
-            os.system('a.exe <'+input_file+' >'+received_out)
-            if (filecmp.cmp(e_out_file, received_out, shallow=False)):
-                new_submission.verdict ='Accepted'
+            if request.user.is_authenticated:
+                new_submission=submissions()
+                new_submission.problem=problems.objects.get(pk=problem_id)
+                new_submission.submitted_code=request.FILES["submitted_code"]
+                code_file = r"oj_received\try_code.cpp"
+                input_file = r"oj_test_cases\input_oj.txt"
+                e_out_file = r"oj_expected_outputs\output_oj.txt"
+                received_out = r"received_outputs\rec_out.txt"
+                #os.system('dir')
+                os.system('g++ '+code_file)
+                os.system('a.exe <'+input_file+' >'+received_out)
+                if (filecmp.cmp(e_out_file, received_out, shallow=False)):
+                    new_submission.verdict ='Accepted'
+                else:
+                    new_submission.verdict = 'Not Accepted'
+                new_submission.save()
+                print(new_submission.verdict, new_submission.problem)
+                return redirect('submission_page')
             else:
-                new_submission.verdict = 'Not Accepted'
-            new_submission.save()
-            print(new_submission.verdict, new_submission.problem)
-            return redirect('/submission')
+                messages.warning(request, f'Please login to make a subnmission')
+                return redirect('home_page')
 
             # C:\Users\pratik shukla\Desktop\Oj\Online_judge\oj_test_cases\input_oj.txt
     else:
