@@ -5,10 +5,12 @@ from django.template import loader
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import submission_form
 from django.contrib import messages
-
+import docker, subprocess
+from docker.models.containers import Container
 import os 
 import filecmp
 
+client = docker.from_env()
 
 def home(request):
     problems_list=problems.objects.all()
@@ -32,8 +34,18 @@ def problem(request, problem_id):
                 e_out_file = r"oj_expected_outputs\output_oj.txt"
                 received_out = r"received_outputs\rec_out.txt"
                 #os.system('dir')
-                os.system('g++ '+code_file)
-                os.system('a.exe <'+input_file+' >'+received_out)
+                container:Container=client.containers.get("myojcompiler")
+                if container.status != 'running':
+                    container.start()
+
+                os.system('docker cp '+code_file+' '+container.id + ':code_file.cpp')
+                os.system('docker cp '+input_file+' '+container.id + ':input_file.txt')
+                os.system('docker exec g++ code_file.cpp a.exe <input_file.txt > rec_out.txt')
+                os.system('docker cp '+container.id +':rec_out.txt '+received_out)
+
+
+                # os.system('g++ '+code_file)
+                # os.system('a.exe <'+input_file+' >'+received_out)
                 if (filecmp.cmp(e_out_file, received_out, shallow=False)):
                     new_submission.verdict ='Accepted'
                 else:
