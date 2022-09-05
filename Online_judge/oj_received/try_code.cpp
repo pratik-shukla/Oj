@@ -72,18 +72,10 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    ll f,rem, s;
-    for (int i=1; i<18; i++){
-        f = i * (i-1)/2;
-        s=(1<<(i+1));
-      //cout << s << '\n';
-        rem = s % 3;
-        s /= 3;
-        if (rem)
-            s += 1;
-        if (f>s)
-            cout << 1 << " ";
-        else
-            cout << 0 << " ";
-    }  
+    ll n;
+    cin>>n;
+    string s;
+    for (int i = 0; i<n; i++)
+        cin >> s;
+    cout << 0;
 }

@@ -32,7 +32,7 @@ def problem(request, problem_id):
                 code_file = r"oj_received\try_code.cpp"
                 input_file = r"oj_test_cases\input_oj.txt"
                 e_out_file = r"oj_expected_outputs\output_oj.txt"
-                received_out = r"received_outputs\rec_out.txt"
+                received_out = r"received_outputs"
                 #os.system('dir')
                 container:Container=client.containers.get("myojcompiler")
                 if container.status != 'running':
@@ -40,13 +40,18 @@ def problem(request, problem_id):
 
                 os.system('docker cp '+code_file+' '+container.id + ':code_file.cpp')
                 os.system('docker cp '+input_file+' '+container.id + ':input_file.txt')
-                os.system('docker exec g++ code_file.cpp a.exe <input_file.txt > rec_out.txt')
+                # probably error at line 43 and 44
+                #os.system('docker exec myojcompiler g++ --version')
+
+                os.system('docker exec myojcompiler g++ code_file.cpp')
+                os.system('docker exec myojcompiler ./a.out > rec_out.txt')
                 os.system('docker cp '+container.id +':rec_out.txt '+received_out)
 
+                container.stop()
 
                 # os.system('g++ '+code_file)
                 # os.system('a.exe <'+input_file+' >'+received_out)
-                if (filecmp.cmp(e_out_file, received_out, shallow=False)):
+                if (filecmp.cmp(e_out_file, r"rec_out.txt", shallow=False)):
                     new_submission.verdict ='Accepted'
                 else:
                     new_submission.verdict = 'Not Accepted'
